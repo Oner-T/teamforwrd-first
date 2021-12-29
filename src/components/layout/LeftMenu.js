@@ -8,6 +8,11 @@ import companyIcon from '../../assets/images/companyIcon.svg'
 import dashboardIcon from '../../assets/images/dashboardIcon.svg'
 import jobIcon from '../../assets/images/jobIcon.svg'
 import userIcon from '../../assets/images/userIcon.svg'
+import settingsIcon from '../../assets/images/settingsIcon.svg'
+import workforceIcon from '../../assets/images/workforceIcon.svg'
+import marketingSvg from '../../assets/images/marketingSvg.svg'
+import scheduleIcon from '../../assets/images/scheduleIcon.svg'
+import tickIcon from '../../assets/images/tickIcon.svg'
 
 const LeftMenu = () => {
   return (
@@ -20,19 +25,22 @@ const LeftMenu = () => {
       <LowerPart>
         <img src={dashboardIcon} alt='' />
         <img src={userIcon} alt='' />
-        <img src={clientIcon} alt='' />
-        <img src={analyticsIcon} alt='' />
-        <img src={clientIcon} alt='' />
-        <img src={companyIcon} alt='' />
-        
         <img src={jobIcon} alt='' />
+        <img src={workforceIcon} alt='' />
+        <img src={clientIcon} alt='' />
+        <img src={marketingSvg} alt='' />
+        <img src={scheduleIcon} alt='' />
+        <img src={analyticsIcon} alt='' />
+        <img src={tickIcon} alt='' />
+        <img src={settingsIcon} alt='' />
+        <img src={companyIcon} alt='' />
       </LowerPart>
     </LeftMenuC>
   )
 }
 
 const LeftMenuC = styled.div`
-  height: 100vh
+  height: 100%
   width: 95px
   background-color: #2a3744
   display: flex
@@ -55,7 +63,7 @@ const TopPart = styled.div`
 `
 
 const LowerPart = styled.div`
- height: 80%;
+companyIcon
  width: 95px;
  background-color: #2a3744;
  display: flex;
