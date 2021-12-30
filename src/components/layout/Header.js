@@ -20,6 +20,7 @@ const HeaderC = styled.div`
   justify-content: space-between;
   background-color: white;
   box-shadow: 0px 0px 5px #DFE1E6;
+  padding: 10px;
   img {
       margin: 0 55px;
   };

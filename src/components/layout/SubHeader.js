@@ -28,6 +28,7 @@ const SubHeaderC = styled.div`
   align-items: center;
   padding-right:35px;
   padding-left:55px;
+  margin-top:20px;
 `;
 const LeftColumn = styled.div`
   width: 50%;
