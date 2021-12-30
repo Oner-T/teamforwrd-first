@@ -20,10 +20,14 @@ const HeaderC = styled.div`
   justify-content: space-between;
   background-color: white;
   box-shadow: 0px 0px 5px #DFE1E6;
-  padding: 10px;
-  img {
+  padding: 10px 0;
+  img:nth-child(1) {
+      width: 45px;
       margin: 0 55px;
   };
+  img:nth-child(2) {
+    margin: 0 35px;
+};
 `
 
 

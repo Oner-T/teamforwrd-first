@@ -3,9 +3,14 @@ import styled from 'styled-components';
 import dropdownArrow from '../../assets/images/dropdownArrow.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { dataAction } from '../../redux/actions/dataAction';
+import dots from '../../assets/images/dots.svg';
+import stars from '../../assets/images/stars.svg';
 
 const Main = () => {
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [ekstraFunc, setEkstraFunc] = useState(false);
+  const [leftSpace, setLeftSpace] = useState(0);
   const state = useSelector((state) => state.data);
   const dispatch = useDispatch();
 
@@ -14,13 +19,25 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
-    setData([])
     setData(state.data.results);
-    console.log(state.data);
   }, [state.data]);
 
   const fetchMoreData = () => {
-    dispatch(dataAction(10, 20));
+    if (page <= 36) {
+      dispatch(dataAction(page, 10));
+      setPage(page + 1);
+      //pagination bar movement logic:
+      setLeftSpace(page * (360 / (362 / 10)));
+    } else {
+      dispatch(dataAction());
+      setPage(1);
+      setLeftSpace(0);
+    }
+  };
+
+  const extraFunc = () => {
+    console.log('burada');
+    setEkstraFunc(!ekstraFunc);
   };
 
   return (
@@ -29,24 +46,33 @@ const Main = () => {
         <Table>
           <Thead>
             <tr>
-              <th>
+              <Th style={{ width: 30 }}>
                 <input type='checkbox' />
-              </th>
-              <th>CANDIDATE</th>
-              <th>RATING</th>
-              <th>LOCATION</th>
-              <th>CONTACT</th>
-              <th>AVAILABILITY</th>
+              </Th>
+              <Th>CANDIDATE</Th>
+              <Th>RATING</Th>
+              <Th>LOCATION</Th>
+              <Th>CONTACT</Th>
+              <Th>AVAILABILITY</Th>
+              <Th></Th>
             </tr>
           </Thead>
           <Tbody>
             {data?.map((item) => (
-              <div key={item.professional_id}>
-                <Td>
+              <div key={item.ptn_id}>
+                <Td
+                  style={{
+                    width: 30,
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
                   <input type='checkbox' />
                 </Td>
-                <Td>{item.email}</Td>
-                <Td>1976</Td>
+                <Td>{item.unbiased_identifier}</Td>
+                <Td>
+                  <img src={stars} alt='' />
+                </Td>
                 <Td>
                   London
                   <br />
@@ -54,19 +80,31 @@ const Main = () => {
                 </Td>
                 <Td>{item.email}</Td>
                 <Select>
-                  <option value='selected'>Active</option>
-                  <option>Avaliable</option>
-                  <option>Not Active</option>
-                  <option>Passive</option>
+                  <option value='active'>Active</option>
+                  <option value='avaliable'>Avaliable</option>
+                  <option value='not active'>Not Active</option>
+                  <option value='passive'>Passive</option>
                 </Select>
+                <Td onClick={extraFunc}>
+                  <img src={dots} alt='' />
+                </Td>
               </div>
             ))}
+            {ekstraFunc ? <Modal>asdasd</Modal> : null}
           </Tbody>
         </Table>
         <Pagination>
-          <Number>SHOWING 10 of {state.data.total} Candidates</Number>
-          <Bar />
-          <Button onClick={fetchMoreData}>Load more candidates</Button>
+          <Number>
+            SHOWING between {page * 10 - 10} and{' '}
+            {page * 10 > state.data.total ? state.data.total : page * 10} of{' '}
+            {state.data.total} Candidates
+          </Number>
+          <Bar>
+            <ActiveBar leftSpace={leftSpace} />
+          </Bar>
+          <Button onClick={fetchMoreData}>
+            {page <= 36 ? 'Load more candidates' : 'Back to start'}
+          </Button>
         </Pagination>
       </MainC>
     </Suspense>
@@ -85,6 +123,7 @@ const MainC = styled.div`
 const Table = styled.table`
   margin-right: 35px;
   margin-left: 55px;
+  height: 100%;
 `;
 
 const Thead = styled.thead`
@@ -95,7 +134,6 @@ const Thead = styled.thead`
   font-size: 10px;
   color: #818d99;
   display: flex;
-  flex-direction: co;
   justify-content: space-around;
   tr {
     width: 100%;
@@ -107,14 +145,21 @@ const Thead = styled.thead`
 `;
 
 const Tbody = styled.tbody`
+  position: relative;
   width: 1255px;
   color: #818d99;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   div {
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+    border-bottom: solid 1px rgba(223, 231, 239, 0.5);
+    border-opacity: 50%;
+    height: 61px;
   }
 `;
 
@@ -129,11 +174,17 @@ const Select = styled.select`
   background-repeat: no-repeat;
   background-position-x: 90%;
   background-position-y: 13px;
+  padding-left: 20px;
+`;
+
+const Th = styled.th`
+  width: 120px;
+  margin: 10px 0;
 `;
 
 const Td = styled.td`
   width: 120px;
-  margin: 10px;
+  margin: 10px 0;
   font-size: 14px;
 `;
 
@@ -143,20 +194,29 @@ const Pagination = styled.div`
   align-items: center;
   justify-content: center;
   margin: 20px;
+  margin-top: 75px;
   width: 320px;
   height: 87px;
-  div {
-    margin-top: 10px;
-  }
 `;
 const Number = styled.div`
   font-size: 12px;
   font-weight: 600;
+  margin-bottom: 10px;
 `;
 const Bar = styled.div`
-  width: 320px;
+  width: 362px;
   height: 10px;
   background-color: #dfe9f4;
+  border-radius: 10px;
+  position: relative;
+`;
+const ActiveBar = styled.div`
+  position: absolute;
+  top: 0px;
+  ${({ leftSpace }) => `left : ${leftSpace}px`};
+  width: 10px;
+  height: 10px;
+  background-color: #2a3744;
   border-radius: 10px;
 `;
 const Button = styled.button`
@@ -167,6 +227,16 @@ const Button = styled.button`
   font-size: 14px;
   font-weight: 500;
   color: #ffffff;
+  margin-top: 10px;
+`;
+const Modal = styled.span`
+  position: absolute;
+  top: 10px;
+  width: 165px;
+  height: 157px;
+  box-shadow: 10px grey;
+  background-color: white;
+  z-index: 10;
 `;
 
 export default Main;

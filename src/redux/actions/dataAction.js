@@ -14,7 +14,7 @@ export const dataAction =
         'https://staging-api.recruitd.co.uk/v2/talent_network/15097/list',
         {
           filters: {
-            slice: [start, slice],
+            slice: [start * 10, slice],
             team_member_id: 471,
           },
         },
