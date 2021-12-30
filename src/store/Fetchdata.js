@@ -17,6 +17,7 @@ const Fetchdata = async () => {
     },
     config
   );
+  console.log('fetchdata', res.data.results)
   return res.data.results;
 };
 
